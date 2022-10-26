@@ -9,6 +9,7 @@
  $database = "formulaire";
  $username = "username";
  $password = "password";
+ $email = "email";
 
 $conn =  mysqli_connect_error($server, $user, $password, $database);
 
@@ -22,49 +23,24 @@ if (!$conn) {
 
     include 'databaseconnect.php';
     //On the form : metho="GET"
-    if(isset($_GET['submit'])) {
+    if(isset($_POST['submit'])) {
 
         //On your form, these are the name of each input
-        $name = $_GET['name'];
-        $email = $_GET['email']; 
-        $subject = $_GET['subject']; 
-        $message = $_GET['message'];
+        $username = $_POST['username'];
+        $email = $_POST['email']; 
+        $subject = $_POST['subject']; 
+        $message = $_POST['message'];
 
-        //SEND MAIL
-        $mailTo = "your_email";//received mail on this refered email
-        $header = "From :".$email;
-        $content = "Subject :".$subject."\n".$message;
-        
+        $req = "INSERT INTO client(nom, prenom, email, password) VALUES(?,?,?,?)"
+        $execute = $pdo->prepare($req);
+        $stm = $execute->([$nom, $, $email, $mdp]);
+        $stm =$execute->execute([$nom, $prenom, $email, $mdp])
+        echo "<center>inscription effectué avec success !</center>";
 
-        //ADD IN DATABASE
-        $check_duplicate = "SELECT * FROM X WHERE email = '$email' AND message = '$message'"; // X is the name of your TABLE
-        $result_check = mysqli_num_rows(mysqli_query($conn,$check_duplicate));
 
-        if($result_check > 0) {
-            //
-            echo '<script>alert("Record already existed")</script>';
-        } else {
-            mail($mailTo,$subject,$content,$header);
-            $insert_sql =  "INSERT INTO X VALUES ('','$name', '$email', '$subject', '$message')";
-        
-            if (mysqli_query($conn,$insert_sql)) {
-                echo '<script>alert("New record created successfully")</script>';
-            } else {
-                echo "Error: " . $insert_sql . "<br>" . mysqli_error($insert_sql);
-            }
-        }
-        
-        
     }
 
 ?>
-
-
-
-
-
-
-
 
 
 <!DOCTYPE html>
